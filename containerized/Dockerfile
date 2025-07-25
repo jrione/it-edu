@@ -32,6 +32,7 @@ COPY . /var/www/html/
 RUN sed -i 's/user = nobody/user = nginx/' /etc/php84/php-fpm.d/www.conf
 RUN sed -i 's/group = nobody/group = nginx/' /etc/php84/php-fpm.d/www.conf
 
+RUN compose install --no-dev --optimize-autoloader
 RUN chown -R nginx:nginx /var/www/html
 
 EXPOSE 8080

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: it-edu
+  name: it-edu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: it-edu
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: it-edu
+    spec:
+      containers:
+      - image: ghcr.io/jrione/it-edu:latest
+        name: it-edu
+        ports:
+        - containerPort: 80
+        resources: {}
+      volumes:
+      - name: it-edu-env
+        secret:
+          secretName: it-edu-env

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Ingress
+metadata:
+  labels:
+    app: it-edu
+  name: it-edu
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: it-edu.jri.one
+    http:
+      paths:
+      - backend:
+          service:
+            name: it-edu
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
