@@ -29,6 +29,31 @@
 <div class="page-wrapper mt-5">
     <div class="container-xl">
         <div class="row row-deck row-cards justify-content-center">
+            <?php
+            if (session()->getFlashdata('success')) {
+                echo 'div class="alert alert-success mx-4 mt-3 position-relative" style="padding-left: 65px;">';
+                echo '<span data-notify="icon" class="fas fa-check-circle"></span>';
+                echo '<span data-notify="title">SUKSES!</span>';
+                echo '<span data-notify="message">' . session()->getFlashdata('success') . '</span>';
+                echo '</div>';
+            }
+            if (session()->getFlashdata('error')) {
+                echo '<div class="alert alert-danger mx-4 mt-3" style="padding-left: 65px;">';
+                echo '<span data-notify="icon" class="fas fa-times-circle"></span>';
+                echo '<span data-notify="title">GAGAL!</span>';
+                echo '<span data-notify="message">' . session()->getFlashdata('error') . '</span>';
+                echo '</div>';
+            }
+            if (session()->getFlashdata('errors')) {
+                foreach (session()->getFlashdata('errors') as $key => $value) {
+                    echo '<div class="alert alert-danger mx-4 mt-3" style="padding-left: 65px;">';
+                    echo '<span data-notify="icon" class="fas fa-times-circle"></span>';
+                    echo '<span data-notify="title">GAGAL!</span>';
+                    echo '<span data-notify="message">' . $value . '</span>';
+                    echo '</div>';
+                }
+            }
+            ?>
             <!-- Main Content Area - Form Artikel -->
             <div class="col-md-8">
                 <div class="card">
@@ -74,7 +99,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end mt-4">
-                                <a href="<?= base_url('discussion'); ?>" class="btn btn-secondary me-2">Batal</a>
+                                <a href="<?= base_url('artikel'); ?>" class="btn btn-secondary me-2">Batal</a>
                                 <button type="submit" class="btn btn-primary">Simpan Artikel</button>
                             </div>
                         </form>

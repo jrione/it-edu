@@ -26,6 +26,7 @@ $routes->post('artikel/store', 'Artikel::store', ['filter' => 'auth']);   // Mem
 $routes->get('artikel/edit/(:num)', 'Artikel::edit/$1', ['filter' => 'auth']); // Menampilkan form edit
 $routes->post('artikel/update/(:num)', 'Artikel::update/$1', ['filter' => 'auth']); // Memproses edit
 $routes->post('artikel/delete/(:num)', 'Artikel::delete/$1', ['filter' => 'auth']); // Memproses hapus
+$routes->post('artikel/approve/(:num)', 'Artikel::approve/$1', ['filter' => 'auth']); // Memproses hapus
 
 
 // Contoh route untuk dashboard setelah login

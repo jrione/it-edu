@@ -55,16 +55,27 @@
 
             <?php
             if (session()->getFlashdata('success')) {
-                echo '<div class="alert alert-success mx-4 mt-3" style="padding-left: 65px;">';
+                echo '<div class="alert alert-success mx-4 mt-3 position-relative" style="padding-left: 65px;">';
+                echo '<span data-notify="icon" class="fas fa-check-circle"></span>';
                 echo '<span data-notify="title">SUKSES!</span>';
                 echo '<span data-notify="message">' . session()->getFlashdata('success') . '</span>';
                 echo '</div>';
             }
             if (session()->getFlashdata('error')) {
                 echo '<div class="alert alert-danger mx-4 mt-3" style="padding-left: 65px;">';
-                echo '<span data-notify="title">GAGAL! </span>';
+                echo '<span data-notify="icon" class="fas fa-times-circle"></span>';
+                echo '<span data-notify="title">GAGAL!</span>';
                 echo '<span data-notify="message">' . session()->getFlashdata('error') . '</span>';
                 echo '</div>';
+            }
+            if (session()->getFlashdata('errors')) {
+                foreach (session()->getFlashdata('errors') as $key => $value) {
+                    echo '<div class="alert alert-danger mx-4 mt-3" style="padding-left: 65px;">';
+                    echo '<span data-notify="icon" class="fas fa-times-circle"></span>';
+                    echo '<span data-notify="title">GAGAL!</span>';
+                    echo '<span data-notify="message">' . $value . '</span>';
+                    echo '</div>';
+                }
             }
             ?>
 
@@ -113,7 +124,7 @@
                                         <td style="width: 250px;"><?= $value['title'] ?></td>
                                         <td><?= $value['content'] ?></td>
                                         <td class="text-center" style="width: 200px;">
-                                            <?= $value['is_approved'] == 0 ? "Belom di approve" : "Approved" ?>
+                                            <?= $value['is_approved'] == 0 ? "Not approved" : "Approved" ?>
                                             <!-- <span class="badge bg-<?= $value['is_approved'] == 0 ? "danger" : "success" ?>">
                                             </span> -->
                                         </td>
@@ -124,8 +135,24 @@
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                     <li><a class="dropdown-item" href="<?= base_url('artikel/edit/' . $value['id']); ?>">Update</a></li>
-                                                    <li><a class="dropdown-item" href="<?= base_url('artikel/delete/' . $value['id']); ?>">Delete</a></li>
-                                                    <!-- <li><a class="dropdown-item" href="<?= base_url('artikel/edit/' . $value['id']); ?>">View</a></li> -->
+                                                    <?php if (session()->get('user_role') == 'admin') { ?>
+                                                        <li>
+                                                            <form style="margin-bottom: 0px;" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
+                                                                <?= csrf_field() ?>
+                                                                <button type="submit" class="dropdown-item" style="border: none; background: none;">
+                                                                    <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    <?php } ?>
+                                                    <li>
+                                                        <form style="margin-bottom: 0px;" action="<?= base_url('artikel/delete/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus artikel?');">
+                                                            <?= csrf_field() ?>
+                                                            <button type="submit" class="dropdown-item text-danger" style="border: none; background: none;">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>

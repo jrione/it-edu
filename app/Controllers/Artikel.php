@@ -26,13 +26,18 @@ class Artikel extends Controller
             return redirect()->to(base_url('auth/login'));
         }
 
-        // Ambil semua diskusi untuk ditampilkan di halaman utama diskusi
-        // Anda perlu memodifikasi ini untuk mengambil data yang lebih kompleks
-        // Contoh: Mengambil 2 postingan terbaru atau postingan populer
-        $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
-            ->join('users', 'users.id = artikel.author_id')
-            ->orderBy('created_at', 'DESC')
-            ->findAll(5); // Ambil 5 diskusi terbaru
+        if ($this->session->get('user_role') == "user") {
+            $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
+                ->join('users', 'users.id = artikel.author_id')
+                ->where('author_id', $this->session->get('id_user'))
+                ->orderBy('created_at', 'ASC')
+                ->findAll();
+        } else {
+            $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
+                ->join('users', 'users.id = artikel.author_id')
+                ->orderBy('created_at', 'ASC')
+                ->findAll();
+        }
 
         // Tambahkan likes dan komens count serta formatted time
         foreach ($artikel as $key => $value) {
@@ -92,7 +97,7 @@ class Artikel extends Controller
 
         $komenData = [
             'artikel_id' => $articleId,
-            'user_id' => $this->session->get('id'), // Ambil ID user dari session
+            'user_id' => $this->session->get('id_user'), // Ambil ID user dari session
             'komen_text' => $this->request->getPost('komen_text'),
         ];
 
@@ -132,9 +137,6 @@ class Artikel extends Controller
         $rules = [
             'title' => 'required|min_length[5]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'type' => 'required|in_list[materi,tugas,pengumuman,lainnya]',
-            'session_name' => 'permit_empty|max_length[100]',
-            'subject' => 'permit_empty|max_length[100]',
             'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,doc,docx,ppt,pptx,zip,rar]', // Max 2MB, hanya beberapa ekstensi
         ];
 
@@ -151,19 +153,15 @@ class Artikel extends Controller
         }
 
         $data = [
-            'author_id' => $this->session->get('id'), // Ambil ID user dari session
+            'author_id' => $this->session->get('id_user'), // Ambil ID user dari session
             'title' => $this->request->getPost('title'),
             'content' => $this->request->getPost('content'),
-            'type' => $this->request->getPost('type'),
-            'session_name' => $this->request->getPost('session_name'),
-            'subject' => $this->request->getPost('subject'),
-            'file_name' => $fileName,
-            'likes' => 0, // Default likes
+            // 'file_name' => $fileName,
         ];
 
         if ($this->artikelModel->insert($data)) {
             $this->session->setFlashdata('success', 'Artikel berhasil ditambahkan!');
-            return redirect()->to(base_url('discussion')); // Redirect ke halaman diskusi
+            return redirect()->to(base_url('artikel')); // Redirect ke halaman diskusi
         } else {
             $this->session->setFlashdata('error', 'Gagal menambahkan artikel. Mohon coba lagi.');
             return redirect()->back()->withInput();
@@ -187,9 +185,10 @@ class Artikel extends Controller
             return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
         }
 
-        // Opsional: Cek apakah user yang login adalah pemilik artikel
-        if ($article['author_id'] != $this->session->get('id_user')) {
-            return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
+        if ($this->session->get('user_role') == "user") {
+            if ($article['author_id'] != $this->session->get('id_user')) {
+                return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
+            }
         }
 
         $data = [
@@ -209,27 +208,25 @@ class Artikel extends Controller
         }
 
         if ($id === null) {
-            return redirect()->to(base_url('discussion'))->with('error', 'ID artikel tidak valid.');
+            return redirect()->to(base_url('artikel'))->with('error', 'ID artikel tidak valid.');
         }
 
         $existingArticle = $this->artikelModel->find($id);
 
         if (empty($existingArticle)) {
-            return redirect()->to(base_url('discussion'))->with('error', 'Artikel tidak ditemukan.');
+            return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
         }
 
-        // Opsional: Cek apakah user yang login adalah pemilik artikel
-        if ($existingArticle['author_id'] != $this->session->get('id')) {
-            return redirect()->to(base_url('discussion'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
+        if ($this->session->get('user_role') == "user") {
+            if ($existingArticle['author_id'] != $this->session->get('id_user')) {
+                return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
+            }
         }
 
         // Aturan validasi (sama seperti store, sesuaikan jika ada perbedaan)
         $rules = [
             'title' => 'required|min_length[5]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'type' => 'required|in_list[materi,tugas,pengumuman,lainnya]',
-            'session_name' => 'permit_empty|max_length[100]',
-            'subject' => 'permit_empty|max_length[100]',
             'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,doc,docx,ppt,pptx,zip,rar]',
         ];
 
@@ -238,9 +235,8 @@ class Artikel extends Controller
         }
 
         $file = $this->request->getFile('file_upload');
-        $fileName = $existingArticle['file_name']; // Default ke nama file yang sudah ada
-
         if ($file && $file->isValid() && !$file->hasMoved()) {
+            $fileName = $existingArticle['file_name']; // Default ke nama file yang sudah ada
             // Hapus file lama jika ada
             if (!empty($existingArticle['file_name']) && file_exists(WRITEPATH . 'uploads/' . $existingArticle['file_name'])) {
                 unlink(WRITEPATH . 'uploads/' . $existingArticle['file_name']);
@@ -252,15 +248,12 @@ class Artikel extends Controller
         $data = [
             'title' => $this->request->getPost('title'),
             'content' => $this->request->getPost('content'),
-            'type' => $this->request->getPost('type'),
-            'session_name' => $this->request->getPost('session_name'),
-            'subject' => $this->request->getPost('subject'),
-            'file_name' => $fileName,
+            // 'file_name' => $fileName,
         ];
 
         if ($this->artikelModel->update($id, $data)) {
             $this->session->setFlashdata('success', 'Artikel berhasil diperbarui!');
-            return redirect()->to(base_url('discussion/article/' . $id)); // Redirect ke detail artikel
+            return redirect()->to(base_url('artikel')); // Redirect ke detail artikel
         } else {
             $this->session->setFlashdata('error', 'Gagal memperbarui artikel. Mohon coba lagi.');
             return redirect()->back()->withInput();
@@ -275,18 +268,19 @@ class Artikel extends Controller
         }
 
         if ($id === null) {
-            return redirect()->to(base_url('discussion'))->with('error', 'ID artikel tidak valid.');
+            return redirect()->to(base_url('artikel'))->with('error', 'ID artikel tidak valid.');
         }
 
         $article = $this->artikelModel->find($id);
 
         if (empty($article)) {
-            return redirect()->to(base_url('discussion'))->with('error', 'Artikel tidak ditemukan.');
+            return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
         }
 
-        // Opsional: Cek apakah user yang login adalah pemilik artikel
-        if ($article['author_id'] != $this->session->get('id')) {
-            return redirect()->to(base_url('discussion'))->with('error', 'Anda tidak memiliki izin untuk menghapus artikel ini.');
+        if ($this->session->get('user_role') == "user") {
+            if ($article['author_id'] != $this->session->get('id_user')) {
+                return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
+            }
         }
 
         // Hapus file terkait jika ada
@@ -296,10 +290,44 @@ class Artikel extends Controller
 
         if ($this->artikelModel->delete($id)) {
             $this->session->setFlashdata('success', 'Artikel berhasil dihapus!');
-            return redirect()->to(base_url('discussion'));
+            return redirect()->to(base_url('artikel'));
         } else {
             $this->session->setFlashdata('error', 'Gagal menghapus artikel. Mohon coba lagi.');
-            return redirect()->to(base_url('discussion'));
+            return redirect()->to(base_url('artikel'));
+        }
+    }
+
+    // approve artikel
+    public function approve($id = null)
+    {
+        if (! $this->session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+
+        if ($id === null) {
+            return redirect()->to(base_url('artikel'))->with('error', 'ID artikel tidak valid.');
+        }
+
+        $article = $this->artikelModel->find($id);
+
+        if (empty($article)) {
+            return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
+        }
+
+        if ($this->session->get('user_role') == "user") {
+            return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk menggaprove artikel ini.');
+        }
+
+        $data = [
+            'is_approved' => !$article['is_approved'],
+        ];
+
+        if ($this->artikelModel->update($id, $data)) {
+            $this->session->setFlashdata('success', 'Artikel berhasil diupdate!');
+            return redirect()->to(base_url('artikel'));
+        } else {
+            $this->session->setFlashdata('error', 'Gagal menghapus artikel. Mohon coba lagi.');
+            return redirect()->to(base_url('artikel'));
         }
     }
 
