@@ -16,8 +16,8 @@ $routes->get('auth/register', 'Auth::register'); // Menampilkan form register
 $routes->post('auth/register', 'Auth::processRegister'); // Memproses form register
 
 // Route untuk halaman diskusi utama
-$routes->get('artikel/(:num)', 'Artikel::view/$1', ['filter' => 'auth']);
-$routes->post('artikel/addComment/(:num)', 'Artikel::addComment/$1', ['filter' => 'auth']);
+$routes->get('lihat_artikel/(:num)', 'Artikel::view/$1', ['filter' => 'auth']);
+$routes->post('lihat_artikel/addComment/(:num)', 'Artikel::addComment/$1', ['filter' => 'auth']);
 
 // Routes untuk CRUD Artikel
 $routes->get('artikel', 'Artikel::index', ['filter' => 'auth']);

@@ -159,7 +159,7 @@
                                     <p class="text-muted">Belum ada komentar.</p>
                                 <?php endif; ?>
 
-                                <form action="<?= base_url('discussion/addComment/' . $article['id']); ?>" method="post" class="mt-4">
+                                <form action="<?= base_url('lihat_artikel/addComment/' . $article['id']); ?>" method="post" class="mt-4">
                                     <?= csrf_field() ?>
                                     <div class="mb-3">
                                         <label for="comment_text" class="form-label">Tambahkan Komentar</label>

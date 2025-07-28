@@ -103,7 +103,7 @@
                                             </div>
                                         </div>
                                         <div style="margin-top: 25px;">
-                                            <a class="nav-link" href="<?= base_url("artikel/" . $value['id']) ?>">
+                                            <a class="nav-link" href="<?= base_url("lihat_artikel/" . $value['id']) ?>">
                                                 <h3 class="card-title"><?= $value['title'] ?></h3>
                                             </a>
                                             <!-- <p><?= $value['content'] ?></p> -->
