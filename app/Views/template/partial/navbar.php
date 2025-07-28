@@ -9,7 +9,7 @@ $menu = $uri->getSegment(1);
             <div class="container-xl">
                 <ul class="navbar-nav">
                     <li class="nav-item <?= $menu == "dashboard" ? "active" : "" ?>">
-                        <a class="nav-link" href="<?= base_url("dashboard") ?>">
+                        <a class="nav-link d-flex items-center justify-center" href="<?= base_url("dashboard") ?>">
                             <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -24,7 +24,7 @@ $menu = $uri->getSegment(1);
                         </a>
                     </li>
                     <li class="nav-item <?= $menu == "artikel" ? "active" : "" ?>">
-                        <a class="nav-link" href="<?= base_url("artikel") ?>">
+                        <a class="nav-link d-flex items-center justify-center" href="<?= base_url("artikel") ?>">
                             <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -39,7 +39,7 @@ $menu = $uri->getSegment(1);
                     </li>
                     <?php if (session()->get('user_role') == 'user') { ?>
                         <li class="nav-item <?= $menu == "profile" ? "active" : "" ?>">
-                            <a class="nav-link" href="<?= base_url("profile") ?>">
+                            <a class="nav-link d-flex items-center justify-center" href="<?= base_url("profile") ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -56,7 +56,7 @@ $menu = $uri->getSegment(1);
                     <?php } ?>
                     <?php if (session()->get('user_role') == 'admin') { ?>
                         <li class="nav-item <?= $menu == "events" ? "active" : "" ?>">
-                            <a class="nav-link" href="<?= base_url("events") ?>">
+                            <a class="nav-link d-flex items-center justify-center" href="<?= base_url("events") ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pacman">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
