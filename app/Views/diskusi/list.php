@@ -90,7 +90,7 @@
                 <div class="container">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <p class="fs-3 m-0">Data Artikel Saya</p>
-                        <a href="tambah_artikel.php" class="btn btn-primary btn-sm">Tambah Data</a>
+                        <a href="<?= base_url('artikel/create'); ?>" class="btn btn-primary btn-sm">Tambah Data</a>
                     </div>
                     <div class="row">
                         <table class="table table-bordered">
@@ -123,10 +123,9 @@
                                                     Aksi
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item" href="#">Update</a></li>
-                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                    <li><a class="dropdown-item" hr
-                                                            ef="#">View</a></li>
+                                                    <li><a class="dropdown-item" href="<?= base_url('artikel/edit/' . $value['id']); ?>">Update</a></li>
+                                                    <li><a class="dropdown-item" href="<?= base_url('artikel/delete/' . $value['id']); ?>">Delete</a></li>
+                                                    <!-- <li><a class="dropdown-item" href="<?= base_url('artikel/edit/' . $value['id']); ?>">View</a></li> -->
                                                 </ul>
                                             </div>
                                         </td>

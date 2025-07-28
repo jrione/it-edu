@@ -118,7 +118,7 @@ class Artikel extends Controller
             'errors' => session()->getFlashdata('errors'), // Ambil error validasi
         ];
 
-        return view('artikel/form', $data);
+        return view('diskusi/form', $data);
     }
 
     // Memproses data dari form tambah artikel
@@ -178,18 +178,18 @@ class Artikel extends Controller
         }
 
         if ($id === null) {
-            return redirect()->to(base_url('discussion'))->with('error', 'ID artikel tidak valid.');
+            return redirect()->to(base_url('artikel'))->with('error', 'ID artikel tidak valid.');
         }
 
         $article = $this->artikelModel->find($id);
 
         if (empty($article)) {
-            return redirect()->to(base_url('discussion'))->with('error', 'Artikel tidak ditemukan.');
+            return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
         }
 
         // Opsional: Cek apakah user yang login adalah pemilik artikel
-        if ($article['author_id'] != $this->session->get('id')) {
-            return redirect()->to(base_url('discussion'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
+        if ($article['author_id'] != $this->session->get('id_user')) {
+            return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk mengedit artikel ini.');
         }
 
         $data = [
@@ -198,7 +198,7 @@ class Artikel extends Controller
             'errors' => session()->getFlashdata('errors'),
         ];
 
-        return view('artikel/form', $data);
+        return view('diskusi/form', $data);
     }
 
     // Memproses data dari form edit artikel

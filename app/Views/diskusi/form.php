@@ -61,42 +61,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="type" class="form-label">Tipe Postingan</label>
-                                <select class="form-select <?= session()->getFlashdata('errors.type') ? 'is-invalid' : ''; ?>" id="type" name="type">
-                                    <option value="">Pilih Tipe</option>
-                                    <option value="materi" <?= old('type', $article['type'] ?? '') == 'materi' ? 'selected' : ''; ?>>Materi</option>
-                                    <option value="tugas" <?= old('type', $article['type'] ?? '') == 'tugas' ? 'selected' : ''; ?>>Tugas</option>
-                                    <option value="pengumuman" <?= old('type', $article['type'] ?? '') == 'pengumuman' ? 'selected' : ''; ?>>Pengumuman</option>
-                                    <option value="lainnya" <?= old('type', $article['type'] ?? '') == 'lainnya' ? 'selected' : ''; ?>>Lainnya</option>
-                                </select>
-                                <?php if (session()->getFlashdata('errors.type')): ?>
-                                    <div class="invalid-feedback">
-                                        <?= session()->getFlashdata('errors.type') ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="session_name" class="form-label">Nama Sesi (Opsional)</label>
-                                <input type="text" class="form-control <?= session()->getFlashdata('errors.session_name') ? 'is-invalid' : ''; ?>" id="session_name" name="session_name" value="<?= old('session_name', $article['session_name'] ?? ''); ?>" placeholder="Contoh: Sesi Ke 16">
-                                <?php if (session()->getFlashdata('errors.session_name')): ?>
-                                    <div class="invalid-feedback">
-                                        <?= session()->getFlashdata('errors.session_name') ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="subject" class="form-label">Mata Pelajaran (Opsional)</label>
-                                <input type="text" class="form-control <?= session()->getFlashdata('errors.subject') ? 'is-invalid' : ''; ?>" id="subject" name="subject" value="<?= old('subject', $article['subject'] ?? ''); ?>" placeholder="Contoh: Bahasa Indonesia">
-                                <?php if (session()->getFlashdata('errors.subject')): ?>
-                                    <div class="invalid-feedback">
-                                        <?= session()->getFlashdata('errors.subject') ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="mb-3">
                                 <label for="file_upload" class="form-label">Lampiran File (Opsional)</label>
                                 <input type="file" class="form-control <?= session()->getFlashdata('errors.file_upload') ? 'is-invalid' : ''; ?>" id="file_upload" name="file_upload">
                                 <?php if (isset($article['file_name']) && !empty($article['file_name'])): ?>

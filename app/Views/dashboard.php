@@ -39,6 +39,31 @@
         font-weight: bold;
         color: #666;
     }
+
+    .for-you-title {
+        font-weight: 700;
+        color: #000000ff;
+        position: relative;
+        display: inline-block;
+    }
+
+    .for-you-title::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        bottom: -4px;
+        left: 0;
+        background-color: #000000ff;
+        border-radius: 2px;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .for-you-title:hover::after {
+        transform: scaleX(1);
+    }
 </style>
 <?= $this->endSection(); ?>
 
@@ -90,6 +115,9 @@
             <!-- content -->
             <div class="col-md-6">
                 <div class="container">
+                    <div class="text-center mb-3">
+                        <h3 class="for-you-title">For You Page</h3>
+                    </div>
                     <div class="row">
                         <?php foreach ($artikel as $key => $value) { ?>
                             <div class="col-md-12">
@@ -106,7 +134,6 @@
                                             <a class="nav-link" href="<?= base_url("lihat_artikel/" . $value['id']) ?>">
                                                 <h3 class="card-title"><?= $value['title'] ?></h3>
                                             </a>
-                                            <!-- <p><?= $value['content'] ?></p> -->
                                         </div>
                                         <div class="card mt-4" style="background-color: aliceblue;">
                                             <div class="card-body pt-1 pb-1">
