@@ -2,7 +2,7 @@
 
 <head>
     <?= $this->include('\App\Views\template\partial\header') ?>
-    <?php $this->renderSection('css'); ?>
+    <?= $this->renderSection('css'); ?>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <a href="<?= base_url("profile") ?>" class="dropdown-item">Profile</a>
                             <div class="dropdown-divider"></div>
-                            <a href="<?= base_url("auth/sign_out") ?>" class="dropdown-item">Logout</a>
+                            <a href="<?= base_url("auth/logout") ?>" class="dropdown-item">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -40,17 +40,15 @@
         </header>
 
         <?= $this->include('\App\Views\template\partial\navbar') ?>
-
         <div class="page-wrapper">
-
-            <?php $this->renderSection('content'); ?>
+            <?= $this->renderSection('content'); ?>
 
             <?= $this->include('\App\Views\template\partial\footer') ?>
         </div>
     </div>
 
     <?= $this->include('\App\Views\template\partial\js') ?>
-    <?php $this->renderSection('javascript'); ?>
+    <?= $this->renderSection('javascript'); ?>
 </body>
 
 </html>

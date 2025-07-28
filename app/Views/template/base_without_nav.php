@@ -9,7 +9,7 @@
             --tblr-font-sans-serif: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
         }
     </style>
-    <?php $this->renderSection('css'); ?>
+    <?= $this->renderSection('css'); ?>
 </head>
 
 <body>
@@ -17,14 +17,14 @@
     <div class="page">
         <div class="page-wrapper">
 
-            <?php $this->renderSection('content'); ?>
+            <?= $this->renderSection('content'); ?>
 
             <?= $this->include('\App\Views\template\partial\footer') ?>
         </div>
     </div>
 
     <?= $this->include('\App\Views\template\partial\js') ?>
-    <?php $this->renderSection('javascript'); ?>
+    <?= $this->renderSection('javascript'); ?>
 </body>
 
 </html>
