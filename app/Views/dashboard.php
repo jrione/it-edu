@@ -135,32 +135,6 @@
                                                 <h3 class="card-title"><?= $value['title'] ?></h3>
                                             </a>
                                         </div>
-                                        <div class="card mt-4" style="background-color: aliceblue;">
-                                            <div class="card-body pt-1 pb-1">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="me-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                                            <path d="M9 9l1 0" />
-                                                            <path d="M9 13l6 0" />
-                                                            <path d="M9 17l6 0" />
-                                                        </svg>
-                                                    </div>
-                                                    <a href="#" class="text-decoration-none">Persamaan_Diferensial_Lanjutan.pdf</a>
-                                                    <a href="#" class="ms-auto btn btn-ghost-light">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                                            <path d="M7 11l5 5l5 -5" />
-                                                            <path d="M12 4v12" />
-                                                        </svg>
-                                                        Unduh
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="card-footer d-flex align-items-center">
                                         <div class="card-footer-item me-auto pt-0">

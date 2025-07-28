@@ -28,6 +28,10 @@ $routes->post('artikel/update/(:num)', 'Artikel::update/$1', ['filter' => 'auth'
 $routes->post('artikel/delete/(:num)', 'Artikel::delete/$1', ['filter' => 'auth']); // Memproses hapus
 $routes->post('artikel/approve/(:num)', 'Artikel::approve/$1', ['filter' => 'auth']); // Memproses hapus
 
+// Routes untuk file uploads
+$routes->get('file/view/(:segment)', 'Artikel::viewFile/$1', ['filter' => 'auth']); // View file
+$routes->get('file/download/(:segment)', 'Artikel::downloadFile/$1', ['filter' => 'auth']); // Download file
+
 
 // Contoh route untuk dashboard setelah login
 $routes->get('dashboard', 'Home::index', ['filter' => 'auth']); // Membutuhkan filter 'auth'

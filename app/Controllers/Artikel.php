@@ -63,7 +63,6 @@ class Artikel extends Controller
         }
 
         $article = $this->artikelModel->getArticleDetails($id);
-
         if (empty($article)) {
             return redirect()->to(base_url('dashboard'))->with('error', 'Data artikel belum diapproved / tidak ditemukan.');
         }
@@ -329,6 +328,42 @@ class Artikel extends Controller
             $this->session->setFlashdata('error', 'Gagal menghapus artikel. Mohon coba lagi.');
             return redirect()->to(base_url('artikel'));
         }
+    }
+
+    // View File dari Artikel
+    public function viewFile($fileName = null)
+    {
+        $path = WRITEPATH . 'uploads/' . $fileName;
+
+        if (!file_exists($path)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("File tidak ditemukan");
+        }
+
+        // Cek MIME type
+        $mime = mime_content_type($path);
+
+        // Cek apakah tipe file bisa ditampilkan di browser
+        $allowed = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'video/mp4', 'video/webm', 'video/ogg'];
+        if (!in_array($mime, $allowed)) {
+            return $this->response->download($path, null);
+        }
+
+        return $this->response
+            ->setHeader('Content-Type', $mime)
+            ->setHeader('Content-Disposition', 'inline; filename="' . $fileName . '"')
+            ->setBody(file_get_contents($path));
+    }
+
+    // Download File dari Artikel
+    public function downloadFile($fileName = null)
+    {
+        $path = WRITEPATH . 'uploads/' . $fileName;
+
+        if (!file_exists($path)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("File tidak ditemukan");
+        }
+
+        return $this->response->download($path, null);
     }
 
     // ... (metode processLogin, register, processRegister, logout yang sudah ada) ...
