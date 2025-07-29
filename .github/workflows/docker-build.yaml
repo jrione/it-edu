@@ -24,9 +24,9 @@ jobs:
     - name: Set up HashiCorp Vault
       uses: hashicorp/vault-action@v2
       with:
-      url: ${{ secrets.VAULT_URL }}
-      method: token
-      token: ${{ secrets.VAULT_TOKEN }}
+        url: ${{ secrets.VAULT_URL }}
+        method: token
+        token: ${{ secrets.VAULT_TOKEN }}
 
     - name: Get secrets from Vault and create .env file
       run: |
