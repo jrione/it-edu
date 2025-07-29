@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: cr.jri.one
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: jrione/it-edu
 
 jobs:
   build-and-push:
