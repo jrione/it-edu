@@ -24,13 +24,13 @@ jobs:
     - name: Set up HashiCorp Vault
       uses: hashicorp/vault-action@v2
       with:
-      url: https://vault.jri.one
+      url: ${{ secrets.VAULT_URL }}
       method: token
       token: ${{ secrets.VAULT_TOKEN }}
 
     - name: Get secrets from Vault and create .env file
       run: |
-        vault kv-get -format=json secret/it-edu | jq -r '.data.data | to_entries[] | "\(.key)=\(.value)"' > .env
+        vault kv-get -format=json config/it-edu | jq -r '.data.data | to_entries[] | "\(.key)=\(.value)"' > .env
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
