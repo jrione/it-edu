@@ -86,16 +86,21 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="file_upload" class="form-label">Lampiran File (Opsional)</label>
-                                <input type="file" class="form-control <?= session()->getFlashdata('errors.file_upload') ? 'is-invalid' : ''; ?>" id="file_upload" name="file_upload[]" multiple>
-                                <?php if (isset($article['file_name']) && !empty($article['file_name'])): ?>
-                                    <small class="form-text text-muted">File saat ini: <?= esc($article['file_name']); ?>. Upload file baru untuk mengganti.</small>
-                                <?php endif; ?>
-                                <?php if (session()->getFlashdata('errors.file_upload')): ?>
-                                    <div class="invalid-feedback">
-                                        <?= session()->getFlashdata('errors.file_upload') ?>
-                                    </div>
-                                <?php endif; ?>
+                                <label class="form-label">Lampiran Saat Ini</label>
+                                <ul>
+                                    <?php foreach ($files as $file): ?>
+                                        <li>
+                                            <a style="padding-right: 20px;" href="<?= base_url("file/view/" . $file['nama_file_simpan']) ?>" class="text-decoration-none" target="_blank"><?= $file['nama_file_ori'] ?></a>
+                                            <input type="checkbox" name="delete_files[]" value="<?= $file['id']; ?>"> Hapus
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Tambah / Ganti File</label>
+                                <input type="file" name="file_upload[]" class="form-control" multiple>
+                                <small class="text-muted">Kosongkan jika tidak ingin menambah file.</small>
                             </div>
 
                             <div class="d-flex justify-content-end mt-4">

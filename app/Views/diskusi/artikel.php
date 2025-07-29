@@ -141,7 +141,8 @@
                                 <?php foreach ($article['files'] as $file): ?>
                                     <!-- ambil ext -->
                                     <?php
-                                    $filename = $file['nama_file'];
+                                    $filename = $file['nama_file_ori'];
+                                    $filenamesimpan = $file['nama_file_simpan'];
                                     ?>
                                     <div class="card mt-4" style="background-color: aliceblue;">
                                         <div class="card-body pt-1 pb-1">
@@ -156,8 +157,8 @@
                                                         <path d="M9 17l6 0" />
                                                     </svg>
                                                 </div>
-                                                <a href="<?= base_url("file/view/" . $filename) ?>" class="text-decoration-none" target="_blank"><?= $filename ?></a>
-                                                <a href="<?= base_url("file/download/" . $filename) ?>" class="ms-auto btn btn-ghost-light">
+                                                <a href="<?= base_url("file/view/" . $filenamesimpan) ?>" class="text-decoration-none" target="_blank"><?= $filename ?></a>
+                                                <a href="<?= base_url("file/download/" . $filenamesimpan) ?>" class="ms-auto btn btn-ghost-light">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                         <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />

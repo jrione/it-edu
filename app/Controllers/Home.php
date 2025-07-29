@@ -28,6 +28,7 @@ class Home extends Controller
 
         $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
             ->join('users', 'users.id = artikel.author_id')
+            ->where('is_approved', 1)
             ->orderBy('created_at', 'DESC')
             ->findAll();
 

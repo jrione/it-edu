@@ -14,7 +14,7 @@ class FilesModel extends Model
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['artikel_id', 'nama_file', 'created_at', 'updated_at'];
+    protected $allowedFields = ['artikel_id', 'nama_file_ori', 'nama_file_simpan', 'created_at', 'updated_at'];
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';

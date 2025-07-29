@@ -1,6 +1,7 @@
 <?php
 $uri = service('uri');
 $menu = $uri->getSegment(1);
+$submenu = $uri->getSegment(2);
 ?>
 
 <div class="navbar-expand-md">
@@ -24,13 +25,13 @@ $menu = $uri->getSegment(1);
                         </a>
                     </li>
                     <?php if (session()->get('isLoggedIn')) { ?>
-                        <li class="nav-item <?= $menu == "artikel" ? "active" : "" ?>">
+                        <li class="nav-item <?= $menu == "artikel" && $submenu != "list-approve" ? "active" : "" ?>">
                             <a class="nav-link d-flex items-center justify-center" href="<?= base_url("artikel") ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <polyline points="9 11 12 14 20 6" />
-                                        <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
@@ -39,35 +40,19 @@ $menu = $uri->getSegment(1);
                             </a>
                         </li>
                     <?php } ?>
-                    <?php if (session()->get('user_role') == 'user') { ?>
-                        <li class="nav-item <?= $menu == "profile" ? "active" : "" ?>">
-                            <a class="nav-link d-flex items-center justify-center" href="<?= base_url("profile") ?>">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                        <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                        <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
-                                    </svg>
-                                </span>
-                                <span class="nav-link-title">
-                                    Profile
-                                </span>
-                            </a>
-                        </li>
-                    <?php } ?>
                     <?php if (session()->get('user_role') == 'admin') { ?>
-                        <li class="nav-item <?= $menu == "events" ? "active" : "" ?>">
-                            <a class="nav-link d-flex items-center justify-center" href="<?= base_url("events") ?>">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pacman">
+                        <li class="nav-item <?= $menu == "artikel" && $submenu == "list-approve" ? "active" : "" ?>">
+                            <a class="nav-link d-flex items-center justify-center" href="<?= base_url("artikel/list-approve") ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M5.636 5.636a9 9 0 0 1 13.397 .747l-5.619 5.617l5.619 5.617a9 9 0 1 1 -13.397 -11.981z" />
-                                        <circle cx="11.5" cy="7.5" r="1" fill="currentColor" />
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                        <path d="M9 15l2 2l4 -4" />
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Events
+                                    Artikel Saya
                                 </span>
                             </a>
                         </li>

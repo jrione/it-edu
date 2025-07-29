@@ -83,8 +83,7 @@
             <div class="col-md-12">
                 <div class="container">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <p class="fs-3 m-0">Data Artikel Saya</p>
-                        <a href="<?= base_url('artikel/create'); ?>" class="btn btn-primary btn-sm">Tambah Data</a>
+                        <p class="fs-3 m-0">Approve Data</p>
                     </div>
                     <div class="row">
                         <table class="table table-bordered">
@@ -117,22 +116,11 @@
                                                     Aksi
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item" href="<?= base_url('artikel/edit/' . $value['id']); ?>">Update</a></li>
-                                                    <?php if (session()->get('user_role') == 'admin') { ?>
-                                                        <li>
-                                                            <form style="margin-bottom: 0px;" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
-                                                                <?= csrf_field() ?>
-                                                                <button type="submit" class="dropdown-item" style="border: none; background: none;">
-                                                                    <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    <?php } ?>
                                                     <li>
-                                                        <form style="margin-bottom: 0px;" action="<?= base_url('artikel/delete/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus artikel?');">
+                                                        <form style="margin-bottom: 0px;" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
                                                             <?= csrf_field() ?>
-                                                            <button type="submit" class="dropdown-item text-danger" style="border: none; background: none;">
-                                                                Delete
+                                                            <button type="submit" class="dropdown-item" style="border: none; background: none;">
+                                                                <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
                                                             </button>
                                                         </form>
                                                     </li>

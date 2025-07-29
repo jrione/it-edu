@@ -3,14 +3,16 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\ArtikelModel; // Pastikan model sudah dibuat
-use App\Models\KomenModel; // Pastikan model sudah dibuat
+use App\Models\ArtikelModel;
+use App\Models\KomenModel;
+use App\Models\FilesModel;
 
 class Artikel extends Controller
 {
     protected $session;
     protected $artikelModel;
     protected $komenModel;
+    protected $filesModel;
 
     public function __construct()
     {
@@ -18,6 +20,7 @@ class Artikel extends Controller
         $this->session = \Config\Services::session();
         $this->artikelModel = new ArtikelModel();
         $this->komenModel = new KomenModel();
+        $this->filesModel = new FilesModel();
     }
 
     public function index()
@@ -26,18 +29,11 @@ class Artikel extends Controller
             return redirect()->to(base_url('auth/login'));
         }
 
-        if ($this->session->get('user_role') == "user") {
-            $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
-                ->join('users', 'users.id = artikel.author_id')
-                ->where('author_id', $this->session->get('id_user'))
-                ->orderBy('created_at', 'ASC')
-                ->findAll();
-        } else {
-            $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
-                ->join('users', 'users.id = artikel.author_id')
-                ->orderBy('created_at', 'ASC')
-                ->findAll();
-        }
+        $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
+            ->join('users', 'users.id = artikel.author_id')
+            ->where('author_id', $this->session->get('id_user'))
+            ->orderBy('created_at', 'ASC')
+            ->findAll();
 
         // Tambahkan likes dan komens count serta formatted time
         foreach ($artikel as $key => $value) {
@@ -177,6 +173,7 @@ class Artikel extends Controller
         $data = [
             'page_title' => 'Tambah Artikel Baru',
             'article' => [], // Kirim array kosong untuk form baru
+            'files' => [], // Ambil error validasi
             'errors' => session()->getFlashdata('errors'), // Ambil error validasi
         ];
 
@@ -201,17 +198,6 @@ class Artikel extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $files = $this->request->getFileMultiple('file_upload');
-        foreach ($files as $file) {
-            if ($file && $file->isValid() && !$file->hasMoved()) {
-                $fileName = $file->getRandomName();
-                $file->move(WRITEPATH . 'uploads', $fileName); // Pindahkan file ke writable/uploads
-
-                // TODO: Menyimpan nama file yang diupload ke DB jika ada Lampiran File
-            }
-        }
-
-
         $data = [
             'author_id' => $this->session->get('id_user'), // Ambil ID user dari session
             'title' => $this->request->getPost('title'),
@@ -219,7 +205,25 @@ class Artikel extends Controller
             // 'file_name' => $fileName,
         ];
 
-        if ($this->artikelModel->insert($data)) {
+        $insertedId = $this->artikelModel->insert($data);
+        if ($insertedId) {
+            // simpan file
+            $files = $this->request->getFileMultiple('file_upload');
+            foreach ($files as $file) {
+                if ($file && $file->isValid() && !$file->hasMoved()) {
+                    $fileName = $file->getRandomName();
+                    $file->move(WRITEPATH . 'uploads', $fileName); // Pindahkan file ke writable/uploads
+
+                    // Menyimpan nama file yang diupload ke DB jika ada Lampiran File
+                    $dataFile = [
+                        'artikel_id' => $insertedId,
+                        'nama_file_ori' => $file->getClientName(),
+                        'nama_file_simpan' => $fileName,
+                    ];
+                    $this->filesModel->insert($dataFile);
+                }
+            }
+
             $this->session->setFlashdata('success', 'Artikel berhasil ditambahkan!');
             return redirect()->to(base_url('artikel')); // Redirect ke halaman diskusi
         } else {
@@ -240,6 +244,7 @@ class Artikel extends Controller
         }
 
         $article = $this->artikelModel->find($id);
+        $files = $this->filesModel->where("artikel_id", $id)->findAll();
 
         if (empty($article)) {
             return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
@@ -254,6 +259,7 @@ class Artikel extends Controller
         $data = [
             'page_title' => 'Edit Artikel',
             'article' => $article,
+            'files' => $files,
             'errors' => session()->getFlashdata('errors'),
         ];
 
@@ -294,17 +300,32 @@ class Artikel extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        // Delete selected files
+        $deleteFiles = $this->request->getPost('delete_files');
+        if (!empty($deleteFiles)) {
+            foreach ($deleteFiles as $fileId) {
+                $file = $this->filesModel->find($fileId);
+                if ($file) {
+                    @unlink(WRITEPATH . 'uploads/' . $file['nama_file_simpan']); // delete from storage
+                    $this->filesModel->delete($fileId); // delete from DB
+                }
+            }
+        }
+
+        // add new data
         $files = $this->request->getFileMultiple('file_upload');
         foreach ($files as $file) {
             if ($file && $file->isValid() && !$file->hasMoved()) {
                 $fileName = $file->getRandomName();
                 $file->move(WRITEPATH . 'uploads', $fileName); // Pindahkan file ke writable/uploads
 
-                // TODO: Insert/Update nama file yang diupload ke DB jika ada update Lampiran File
-                // TODO: Hapus nama file existing di DB jika ada update Lampiran File
+                $dataFile = [
+                    'artikel_id' => $id,
+                    'nama_file_ori' => $file->getClientName(),
+                    'nama_file_simpan' => $fileName,
+                ];
+                $this->filesModel->insert($dataFile);
             }
-
-            // TODO: Hapus file existing pada sistem
         }
 
         $data = [
@@ -360,6 +381,32 @@ class Artikel extends Controller
     }
 
     // approve artikel
+    public function approveData()
+    {
+        if (! $this->session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+        if (session()->get('user_role') != 'admin') {
+            return redirect()->to(base_url('dashboard'));
+        }
+
+        $artikel = $this->artikelModel->select('artikel.*, users.full_name as author_name')
+            ->join('users', 'users.id = artikel.author_id')
+            ->orderBy('created_at', 'ASC')
+            ->findAll();
+
+        // Tambahkan likes dan komens count serta formatted time
+        foreach ($artikel as $key => $value) {
+            $artikel[$key]['posted_ago'] = $this->artikelModel->getTimeAgo($artikel[$key]['created_at']);
+            $artikel[$key]['komens_count'] = $this->komenModel->where('artikel_id', $artikel[$key]['id'])->countAllResults();
+        }
+
+        $data = [
+            'artikel' => $artikel, // Kirim data diskusi ke view
+        ];
+
+        return view('diskusi/approve_data', $data);
+    }
     public function approve($id = null)
     {
         if (! $this->session->get('isLoggedIn')) {
@@ -367,17 +414,17 @@ class Artikel extends Controller
         }
 
         if ($id === null) {
-            return redirect()->to(base_url('artikel'))->with('error', 'ID artikel tidak valid.');
+            return redirect()->to(base_url('artikel/list-approve'))->with('error', 'ID artikel tidak valid.');
         }
 
         $article = $this->artikelModel->find($id);
 
         if (empty($article)) {
-            return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak ditemukan.');
+            return redirect()->to(base_url('artikel/list-approve'))->with('error', 'Artikel tidak ditemukan.');
         }
 
         if ($this->session->get('user_role') == "user") {
-            return redirect()->to(base_url('artikel'))->with('error', 'Anda tidak memiliki izin untuk menggaprove artikel ini.');
+            return redirect()->to(base_url('artikel/list-approve'))->with('error', 'Anda tidak memiliki izin untuk menggaprove artikel ini.');
         }
 
         $data = [
@@ -386,10 +433,10 @@ class Artikel extends Controller
 
         if ($this->artikelModel->update($id, $data)) {
             $this->session->setFlashdata('success', 'Artikel berhasil diupdate!');
-            return redirect()->to(base_url('artikel'));
+            return redirect()->to(base_url('artikel/list-approve'));
         } else {
             $this->session->setFlashdata('error', 'Gagal menghapus artikel. Mohon coba lagi.');
-            return redirect()->to(base_url('artikel'));
+            return redirect()->to(base_url('artikel/list-approve'));
         }
     }
 

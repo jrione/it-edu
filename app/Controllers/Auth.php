@@ -5,8 +5,6 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\RoleModel;
 use CodeIgniter\Controller;
-use CodeIgniter\Session\Session;
-use CodeIgniter\Validation\Validation;
 
 class Auth extends Controller
 {
@@ -131,5 +129,79 @@ class Auth extends Controller
         $this->session->destroy();
         // Redirect ke halaman login
         return redirect()->to(base_url('auth/login'));
+    }
+
+    // profile
+    public function view()
+    {
+        if (! $this->session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+
+        $userModel = new UserModel();
+        $user = $userModel->find(session()->get('id_user'));
+        if (empty($user)) {
+            return redirect()->to(base_url('dashboard'))->with('error', 'Data user tidak ditemukan.');
+        }
+
+        // Data artikel ditemukan, tampilkan
+        $data = [
+            'user' => $user,
+        ];
+
+        return view('auth/profile', $data);
+    }
+    public function updateProfile()
+    {
+        if (! $this->session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+
+        // deklarasi awal
+        $userModel = new UserModel();
+        $id = session()->get("id_user");
+
+        // ambil data
+        $existingUser = $userModel->find($id);
+
+        if (empty($existingUser)) {
+            return redirect()->to(base_url('dashboard'))->with('error', 'Data User tidak ditemukan.');
+        }
+
+        // Definisikan aturan validasi
+        $rules = [
+            'full_name' => 'required|min_length[3]|max_length[255]',
+            // 'email'     => 'required|valid_email|is_unique[users.email]', // Pastikan email unik di tabel users
+            'password'  => 'min_length[6]',
+        ];
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // deklarasi update
+        $data = [
+            'full_name' => $this->request->getPost('full_name'),
+            // 'email' => $this->request->getPost('email'),
+        ];
+        // cek pass dirubah
+        if ($this->request->getPost("password") != "") {
+            $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+        }
+        if ($userModel->update($id, $data)) {
+            $this->session->setFlashdata('success', 'User berhasil diperbarui!');
+        } else {
+            $this->session->setFlashdata('error', 'Gagal memperbarui user. Mohon coba lagi.');
+        }
+
+        // ambil data lagi
+        $userModel = new UserModel();
+        $user = $userModel->find(session()->get('id_user'));
+        if (empty($user)) {
+            return redirect()->to(base_url('dashboard'))->with('error', 'Data user tidak ditemukan.');
+        }
+        $data = [
+            'user' => $user,
+        ];
+        return view('auth/profile', $data);
     }
 }
