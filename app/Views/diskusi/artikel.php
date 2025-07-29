@@ -74,6 +74,31 @@
 <div class="page-wrapper mt-5">
     <div class="container-xl">
         <div class="row row-deck row-cards">
+            <?php
+            if (session()->getFlashdata('success')) {
+                echo '<div class="alert alert-success mx-4 mt-3 position-relative" style="padding-left: 65px;">';
+                echo '<span data-notify="icon" class="fas fa-check-circle"></span>';
+                echo '<span data-notify="title">SUKSES!</span>';
+                echo '<span data-notify="message">' . session()->getFlashdata('success') . '</span>';
+                echo '</div>';
+            }
+            if (session()->getFlashdata('error')) {
+                echo '<div class="alert alert-danger mx-4 mt-3" style="padding-left: 65px;">';
+                echo '<span data-notify="icon" class="fas fa-times-circle"></span>';
+                echo '<span data-notify="title">GAGAL!</span>';
+                echo '<span data-notify="message">' . session()->getFlashdata('error') . '</span>';
+                echo '</div>';
+            }
+            if (session()->getFlashdata('errors')) {
+                foreach (session()->getFlashdata('errors') as $key => $value) {
+                    echo '<div class="alert alert-danger mx-4 mt-3" style="padding-left: 65px;">';
+                    echo '<span data-notify="icon" class="fas fa-times-circle"></span>';
+                    echo '<span data-notify="title">GAGAL!</span>';
+                    echo '<span data-notify="message">' . $value . '</span>';
+                    echo '</div>';
+                }
+            }
+            ?>
 
             <div class="col-md-3">
                 <ul class="nav nav-pills flex-column">
@@ -111,112 +136,89 @@
                                 <p><?= nl2br(esc($article['content'])); ?></p>
                             </div>
 
-                            <!-- TODO: Buat dinamis lampiran file dari data di DB - START -->
-                            <!-- Example .pdf file -->
-                            <div class="card mt-4" style="background-color: aliceblue;">
-                                <div class="card-body pt-1 pb-1">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                                <path d="M9 9l1 0" />
-                                                <path d="M9 13l6 0" />
-                                                <path d="M9 17l6 0" />
-                                            </svg>
+                            <!-- Buat dinamis lampiran file dari data di DB - START -->
+                            <?php if (!empty($article['files'])): ?>
+                                <?php foreach ($article['files'] as $file): ?>
+                                    <!-- ambil ext -->
+                                    <?php
+                                    $filename = $file['nama_file'];
+                                    ?>
+                                    <div class="card mt-4" style="background-color: aliceblue;">
+                                        <div class="card-body pt-1 pb-1">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                        <path d="M9 9l1 0" />
+                                                        <path d="M9 13l6 0" />
+                                                        <path d="M9 17l6 0" />
+                                                    </svg>
+                                                </div>
+                                                <a href="<?= base_url("file/view/" . $filename) ?>" class="text-decoration-none" target="_blank"><?= $filename ?></a>
+                                                <a href="<?= base_url("file/download/" . $filename) ?>" class="ms-auto btn btn-ghost-light">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                                        <path d="M7 11l5 5l5 -5" />
+                                                        <path d="M12 4v12" />
+                                                    </svg>
+                                                    Unduh
+                                                </a>
+                                            </div>
                                         </div>
-                                        <a href="<?= base_url("file/view/test.pdf") ?>" class="text-decoration-none" target="_blank">test.pdf</a>
-                                        <a href="<?= base_url("file/download/test.pdf") ?>" class="ms-auto btn btn-ghost-light">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                                <path d="M7 11l5 5l5 -5" />
-                                                <path d="M12 4v12" />
-                                            </svg>
-                                            Unduh
-                                        </a>
                                     </div>
-                                </div>
-                            </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            <!-- Buat dinamis lampiran file dari data di DB - END -->
 
-                            <!-- Example image file -->
-                            <div class="card mt-4" style="background-color: aliceblue;">
-                                <div class="card-body pt-1 pb-1">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                                <path d="M9 9l1 0" />
-                                                <path d="M9 13l6 0" />
-                                                <path d="M9 17l6 0" />
-                                            </svg>
-                                        </div>
-                                        <a href="<?= base_url("file/view/test.png") ?>" class="text-decoration-none" target="_blank">test.png</a>
-                                        <a href="<?= base_url("file/download/test.png") ?>" class="ms-auto btn btn-ghost-light">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                                <path d="M7 11l5 5l5 -5" />
-                                                <path d="M12 4v12" />
-                                            </svg>
-                                            Unduh
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Example video file -->
-                            <div class="card mt-4" style="background-color: aliceblue;">
-                                <div class="card-body pt-1 pb-1">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                                <path d="M9 9l1 0" />
-                                                <path d="M9 13l6 0" />
-                                                <path d="M9 17l6 0" />
-                                            </svg>
-                                        </div>
-                                        <a href="<?= base_url("file/view/test.mp4") ?>" class="text-decoration-none" target="_blank">test.mp4</a>
-                                        <a href="<?= base_url("file/download/test.mp4") ?>" class="ms-auto btn btn-ghost-light">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-download" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                                <path d="M7 11l5 5l5 -5" />
-                                                <path d="M12 4v12" />
-                                            </svg>
-                                            Unduh
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- TODO: Buat dinamis lampiran file dari data di DB - END -->
-
+                            <!-- KOMEN -->
                             <div class="comment-section">
                                 <h5>Komentar (<?= count($article['comments']); ?>)</h5>
                                 <?php if (!empty($article['comments'])): ?>
                                     <?php foreach ($article['comments'] as $comment): ?>
-                                        <div class="comment-box">
+                                        <!-- Komentar Utama -->
+                                        <div class="comment-box mb-4 p-3 rounded bg-light">
                                             <div class="d-flex align-items-center mb-2">
-                                                <span class="avatar avatar-sm me-2 profile-avatar"><?= substr($comment['comment_author'], 0, 1); ?></span>
+                                                <img src="https://ui-avatars.com/api/?name=<?= $comment['author_name'] ?>&background=0D8ABC&color=fff&size=32" alt="User" class="rounded-circle me-2" width="32" height="32">
                                                 <div>
-                                                    <div class="comment-author"><?= esc($comment['comment_author']); ?></div>
-                                                    <div class="comment-date"><?= esc($comment['comment_posted_ago']); ?></div>
+                                                    <div class="fw-semibold"><?= esc($comment['author_name']); ?></div>
+                                                    <div class="text-muted small"><?= esc($comment['comment_posted_ago']); ?></div>
                                                 </div>
                                             </div>
-                                            <p class="comment-text"><?= nl2br(esc($comment['comment_text'])); ?></p>
+                                            <p class="comment-text mb-1"><?= nl2br(esc($comment['comment_text'])); ?></p>
+
+                                            <!-- Tombol dan Form Balas -->
+                                            <button class="btn btn-sm btn-outline-primary mt-2" onclick="toggleReplyForm(this)">Balas</button>
+                                            <form action="<?= base_url('lihat_artikel/balasKomen/' . $article['id'] . '/' . $comment['id']); ?>" method="post" class="mt-2 d-none reply-form">
+                                                <?= csrf_field() ?>
+                                                <textarea name="reply_text" class="form-control mb-2" rows="2" placeholder="Tulis balasan Anda..."></textarea>
+                                                <button type="submit" class="btn btn-sm btn-primary">Kirim Balasan</button>
+                                            </form>
                                         </div>
+
+                                        <!-- Komentar Balasan -->
+                                        <?php if (!empty($comment['replies'])): ?>
+                                            <?php foreach ($comment['replies'] as $reply): ?>
+                                                <div class="ms-5 comment-box mb-3 p-2 rounded bg-white border">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <img src="https://ui-avatars.com/api/?name=<?= $comment['author_name'] ?>&background=0D8ABC&color=fff&size=32" alt="User" class="rounded-circle me-2" width="32" height="32">
+                                                        <div>
+                                                            <div class="fw-semibold"><?= esc($reply['author_name']); ?></div>
+                                                            <div class="text-muted small"><?= esc($reply['comment_posted_ago']); ?></div>
+                                                        </div>
+                                                    </div>
+                                                    <p class="mb-1"><?= nl2br(esc($reply['comment_text'])); ?></p>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <p class="text-muted">Belum ada komentar.</p>
                                 <?php endif; ?>
 
-                                <form action="<?= base_url('lihat_artikel/addComment/' . $article['id']); ?>" method="post" class="mt-4">
+                                <form action="<?= base_url('lihat_artikel/addKomen/' . $article['id']); ?>" method="post" class="mt-4">
                                     <?= csrf_field() ?>
                                     <div class="mb-3">
                                         <label for="comment_text" class="form-label">Tambahkan Komentar</label>
@@ -228,23 +230,14 @@
 
                         </div>
                         <div class="card-footer d-flex align-items-center">
-                            <div class="card-footer-item me-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="card-footer-item me-auto pt-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
                                 </svg>
-                                <?= esc(count($article['comments'])); ?> Komentar
-                            </div>
-                            <div class="card-footer-item">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-share" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                    <path d="M18 16m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                    <path d="M18 8m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                    <path d="M8.7 10.7l6.6 -3.4" />
-                                    <path d="M8.7 13.3l6.6 3.4" />
-                                </svg>
-                                Bagikan
+                                <div style="margin-bottom: 2px;">
+                                    <?= esc(count($article['comments'])); ?> Komentar
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -258,6 +251,11 @@
     </div>
 </div>
 <?= $this->endSection(); ?>
-
 <?= $this->section('javascript'); ?>
+<script>
+    function toggleReplyForm(button) {
+        const form = button.nextElementSibling;
+        form.classList.toggle('d-none');
+    }
+</script>
 <?= $this->endSection(); ?>

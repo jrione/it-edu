@@ -31,6 +31,19 @@
                     class="img-fluid" alt="Sample image">
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link p-0 my-4" href="<?= base_url('dashboard'); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M5 12l14 0" />
+                                <path d="M5 12l4 4" />
+                                <path d="M5 12l4 -4" />
+                            </svg>
+                            Kembali ke Dashboard
+                        </a>
+                    </li>
+                </ul>
                 <form action="<?= base_url('auth/login'); ?>" method="post">
                     <?= csrf_field() ?>
 
@@ -55,7 +68,7 @@
                     <?php endif; ?>
 
                     <div class="text-center text-lg-start mt-4 pt-2">
-                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-md"
                             style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
                         <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="<?= base_url('auth/register'); ?>"
                                 class="link-danger">Register</a></p>

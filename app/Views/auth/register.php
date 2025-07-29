@@ -75,7 +75,7 @@
                     <?php endif; ?>
 
                     <div class="text-center text-lg-start mt-4 pt-2">
-                        <button type="submit" class="btn btn-primary btn-lg"
+                        <button type="submit" class="btn btn-primary btn-md"
                             style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
                         <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="<?= base_url('auth/login'); ?>"
                                 class="link-danger">Login here</a></p>

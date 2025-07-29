@@ -36,7 +36,7 @@ class ArtikelModel extends Model
         if ($article) {
             // Ambil komentar untuk artikel ini
             $commentModel = new KomenModel();
-            $comments = $commentModel->where('artikel_id', $id)->findAll();
+            $comments = $commentModel->select('komen.*, users.full_name as author_name')->join('users', 'users.id = komen.user_id')->where('artikel_id', $id)->findAll();
 
             // Format waktu untuk komentar
             foreach ($comments as &$comment) {
@@ -44,6 +44,11 @@ class ArtikelModel extends Model
             }
             $article['comments'] = $comments;
             $article['posted_ago'] = $this->getTimeAgo($article['created_at']);
+
+            // ambil file untuk artikel ini
+            $filesModel = new FilesModel();
+            $dataFile = $filesModel->where('artikel_id', $id)->findAll();
+            $article['files'] = $dataFile;
         }
 
         return $article;

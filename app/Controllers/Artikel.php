@@ -68,12 +68,33 @@ class Artikel extends Controller
         }
 
         // Data artikel ditemukan, tampilkan
+        $article['comments'] = $this->nestComments($article['comments']);
         $data = [
             'page_title' => $article['title'],
             'article' => $article,
         ];
 
         return view('diskusi/artikel', $data);
+    }
+    function nestComments($comments)
+    {
+        // dd($comments);
+        $nested = [];
+
+        foreach ($comments as $comment) {
+            if ($comment['parrent_komen_id'] == 0) {
+                $nested[$comment['id']] = $comment;
+                $nested[$comment['id']]['replies'] = [];
+            }
+        }
+
+        foreach ($comments as $comment) {
+            if ($comment['parrent_komen_id'] != 0) {
+                $nested[$comment['parrent_komen_id']]['replies'][] = $comment;
+            }
+        }
+
+        return $nested;
     }
 
     public function addKomen($articleId = null)
@@ -87,7 +108,7 @@ class Artikel extends Controller
         }
 
         $rules = [
-            'komen_text' => 'required|min_length[5]',
+            'comment_text' => 'required',
         ];
 
         if (! $this->validate($rules)) {
@@ -97,7 +118,7 @@ class Artikel extends Controller
         $komenData = [
             'artikel_id' => $articleId,
             'user_id' => $this->session->get('id_user'), // Ambil ID user dari session
-            'komen_text' => $this->request->getPost('komen_text'),
+            'comment_text' => $this->request->getPost('comment_text'),
         ];
 
         if ($this->komenModel->insert($komenData)) {
@@ -106,7 +127,44 @@ class Artikel extends Controller
             session()->setFlashdata('error', 'Gagal menambahkan komentar. Coba lagi.');
         }
 
-        return redirect()->to(base_url('artikel/view/' . $articleId));
+        return redirect()->to(base_url('lihat_artikel/' . $articleId));
+    }
+
+    public function balasKomen($articleId = null, $parrentKomenId = null)
+    {
+        if (! $this->session->get('isLoggedIn')) {
+            return redirect()->to(base_url('auth/login'));
+        }
+
+        if ($articleId === null) {
+            return redirect()->to(base_url('artikel'))->with('error', 'Artikel tidak valid.');
+        }
+        if ($parrentKomenId === null) {
+            return redirect()->to(base_url('artikel'))->with('error', 'id_komen tidak valid.');
+        }
+
+        $rules = [
+            'reply_text' => 'required',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $komenData = [
+            'artikel_id' => $articleId,
+            'user_id' => $this->session->get('id_user'),
+            'parrent_komen_id' => $parrentKomenId,
+            'comment_text' => $this->request->getPost('reply_text'),
+        ];
+
+        if ($this->komenModel->insert($komenData)) {
+            session()->setFlashdata('success', 'Komentar berhasil ditambahkan!');
+        } else {
+            session()->setFlashdata('error', 'Gagal menambahkan komentar. Coba lagi.');
+        }
+
+        return redirect()->to(base_url('lihat_artikel/' . $articleId));
     }
 
     // Menampilkan form untuk menambah artikel baru

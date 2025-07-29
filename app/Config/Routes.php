@@ -5,7 +5,11 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+// $routes->get('/', 'Home::index');
+$routes->get('/', function () {
+    return redirect()->to(base_url('dashboard'));
+});
+$routes->get('dashboard', 'Home::index'); // Membutuhkan filter 'auth'
 
 // Routes untuk Autentikasi
 $routes->get('auth/login', 'Auth::login'); // Menampilkan form login
@@ -17,7 +21,8 @@ $routes->post('auth/register', 'Auth::processRegister'); // Memproses form regis
 
 // Route untuk halaman diskusi utama
 $routes->get('lihat_artikel/(:num)', 'Artikel::view/$1', ['filter' => 'auth']);
-$routes->post('lihat_artikel/addComment/(:num)', 'Artikel::addComment/$1', ['filter' => 'auth']);
+$routes->post('lihat_artikel/addKomen/(:num)', 'Artikel::addKomen/$1', ['filter' => 'auth']);
+$routes->post('lihat_artikel/balasKomen/(:num)/(:num)', 'Artikel::balasKomen/$1/$2', ['filter' => 'auth']);
 
 // Routes untuk CRUD Artikel
 $routes->get('artikel', 'Artikel::index', ['filter' => 'auth']);
@@ -31,7 +36,3 @@ $routes->post('artikel/approve/(:num)', 'Artikel::approve/$1', ['filter' => 'aut
 // Routes untuk file uploads
 $routes->get('file/view/(:segment)', 'Artikel::viewFile/$1', ['filter' => 'auth']); // View file
 $routes->get('file/download/(:segment)', 'Artikel::downloadFile/$1', ['filter' => 'auth']); // Download file
-
-
-// Contoh route untuk dashboard setelah login
-$routes->get('dashboard', 'Home::index', ['filter' => 'auth']); // Membutuhkan filter 'auth'

@@ -31,7 +31,7 @@
         <div class="row row-deck row-cards justify-content-center">
             <?php
             if (session()->getFlashdata('success')) {
-                echo 'div class="alert alert-success mx-4 mt-3 position-relative" style="padding-left: 65px;">';
+                echo '<div class="alert alert-success mx-4 mt-3 position-relative" style="padding-left: 65px;">';
                 echo '<span data-notify="icon" class="fas fa-check-circle"></span>';
                 echo '<span data-notify="title">SUKSES!</span>';
                 echo '<span data-notify="message">' . session()->getFlashdata('success') . '</span>';
