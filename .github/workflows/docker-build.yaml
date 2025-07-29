@@ -7,7 +7,7 @@ on:
       - 'v*.*.*'
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: cr.jri.one
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
     - name: Log in to Container Registry
       uses: docker/login-action@v3
       with:
-        registry: cr.jri.one
+        registry: ${{ env.REGISTRY }}
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -46,7 +46,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: cr.jri.one/jrione/it-edu
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: |
           type=ref,event=branch
           type=ref,event=pr
