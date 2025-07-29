@@ -136,20 +136,23 @@ class Artikel extends Controller
         $rules = [
             'title' => 'required|min_length[5]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,doc,docx,ppt,pptx,zip,rar]', // Max 2MB, hanya beberapa ekstensi
+            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,png,jpg,jpeg,mp4,webm,ogg,doc,docx,ppt,pptx,zip,rar]', // Max 2MB, hanya beberapa ekstensi
         ];
 
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $file = $this->request->getFile('file_upload');
-        $fileName = null;
+        $files = $this->request->getFileMultiple('file_upload');
+        foreach ($files as $file) {
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $fileName = $file->getRandomName();
+                $file->move(WRITEPATH . 'uploads', $fileName); // Pindahkan file ke writable/uploads
 
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $fileName = $file->getRandomName();
-            $file->move(WRITEPATH . 'uploads', $fileName); // Pindahkan file ke writable/uploads
+                // TODO: Menyimpan nama file yang diupload ke DB jika ada Lampiran File
+            }
         }
+
 
         $data = [
             'author_id' => $this->session->get('id_user'), // Ambil ID user dari session
@@ -226,22 +229,24 @@ class Artikel extends Controller
         $rules = [
             'title' => 'required|min_length[5]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,doc,docx,ppt,pptx,zip,rar]',
+            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,png,jpg,jpeg,mp4,webm,ogg,doc,docx,ppt,pptx,zip,rar]',
         ];
 
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $file = $this->request->getFile('file_upload');
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $fileName = $existingArticle['file_name']; // Default ke nama file yang sudah ada
-            // Hapus file lama jika ada
-            if (!empty($existingArticle['file_name']) && file_exists(WRITEPATH . 'uploads/' . $existingArticle['file_name'])) {
-                unlink(WRITEPATH . 'uploads/' . $existingArticle['file_name']);
+        $files = $this->request->getFileMultiple('file_upload');
+        foreach ($files as $file) {
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $fileName = $file->getRandomName();
+                $file->move(WRITEPATH . 'uploads', $fileName); // Pindahkan file ke writable/uploads
+
+                // TODO: Insert/Update nama file yang diupload ke DB jika ada update Lampiran File
+                // TODO: Hapus nama file existing di DB jika ada update Lampiran File
             }
-            $fileName = $file->getRandomName();
-            $file->move(WRITEPATH . 'uploads', $fileName);
+
+            // TODO: Hapus file existing pada sistem
         }
 
         $data = [

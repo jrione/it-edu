@@ -87,7 +87,7 @@
 
                             <div class="mb-3">
                                 <label for="file_upload" class="form-label">Lampiran File (Opsional)</label>
-                                <input type="file" class="form-control <?= session()->getFlashdata('errors.file_upload') ? 'is-invalid' : ''; ?>" id="file_upload" name="file_upload">
+                                <input type="file" class="form-control <?= session()->getFlashdata('errors.file_upload') ? 'is-invalid' : ''; ?>" id="file_upload" name="file_upload[]" multiple>
                                 <?php if (isset($article['file_name']) && !empty($article['file_name'])): ?>
                                     <small class="form-text text-muted">File saat ini: <?= esc($article['file_name']); ?>. Upload file baru untuk mengganti.</small>
                                 <?php endif; ?>
