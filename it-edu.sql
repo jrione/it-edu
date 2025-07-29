@@ -31,13 +31,34 @@ CREATE TABLE IF NOT EXISTS `artikel` (
   PRIMARY KEY (`id`),
   KEY `author_id` (`author_id`),
   CONSTRAINT `artikel_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table itedu.artikel: ~2 rows (approximately)
+-- Dumping data for table itedu.artikel: ~3 rows (approximately)
 DELETE FROM `artikel`;
 INSERT INTO `artikel` (`id`, `author_id`, `title`, `content`, `created_at`, `updated_at`, `is_approved`) VALUES
-	(1, 2, 'JUDUL LOREM', 'alsdjlasndkjas', '2025-07-27 20:45:17', '2025-07-27 22:21:44', 1),
-	(2, 2, 'JDUDUL 2', 'sadf,jadsf', '2025-07-27 20:49:02', '2025-07-27 22:22:39', 0);
+	(1, 2, '5 Teknik Manajemen Waktu untuk Pelajar dan Mahasiswa', 'Merasa kewalahan dengan tugas dan deadline? Manajemen waktu adalah kunci. Gunakan teknik seperti Pomodoro, To-Do List harian, atau Eisenhower Matrix. Dengan menerapkan manajemen waktu yang baik, kamu akan lebih produktif dan tidak merasa stres dalam menghadapi jadwal yang padat.\r\n\r\n', '2025-07-27 20:45:17', '2025-07-29 09:43:48', 1),
+	(8, 3, '1 Teknik Manajemen Waktu untuk Pelajar dan Mahasiswa', 'Merasa kewalahan dengan tugas dan deadline? Manajemen waktu adalah kunci. Gunakan teknik seperti Pomodoro, To-Do List harian, atau Eisenhower Matrix. Dengan menerapkan manajemen waktu yang baik, kamu akan lebih produktif dan tidak merasa stres dalam menghadapi jadwal yang padat.\r\n\r\n', '2025-07-27 20:45:17', '2025-07-29 09:38:51', 1),
+	(11, 1, 'cekkkkk 1', 'asdasdasdasdas', '2025-07-29 09:30:33', '2025-07-29 10:13:21', 1);
+
+-- Dumping structure for table itedu.files
+CREATE TABLE IF NOT EXISTS `files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `artikel_id` int(11) NOT NULL,
+  `nama_file_ori` varchar(255) NOT NULL,
+  `nama_file_simpan` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `artikel_id` (`artikel_id`),
+  CONSTRAINT `files_ibfk_1` FOREIGN KEY (`artikel_id`) REFERENCES `artikel` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table itedu.files: ~3 rows (approximately)
+DELETE FROM `files`;
+INSERT INTO `files` (`id`, `artikel_id`, `nama_file_ori`, `nama_file_simpan`, `created_at`, `updated_at`) VALUES
+	(1, 1, 'IF404_NAMA_NIM.pdf', '1753773673_ae7c1351a33e2a21ecf9.pdf', '2025-07-29 07:21:13', '2025-07-29 07:21:13'),
+	(2, 1, 'Soal UAS - Kewirausahaan - Semester Genap 2024-2025 .pdf', '1753773824_d24f5bd200d2e0218568.pdf', '2025-07-29 07:23:44', '2025-07-29 07:23:44'),
+	(3, 11, 'IF404_NAMA_NIM.pdf', '1753781433_e954b81f76af909092b5.pdf', '2025-07-29 09:30:33', '2025-07-29 09:30:33');
 
 -- Dumping structure for table itedu.komen
 CREATE TABLE IF NOT EXISTS `komen` (
@@ -53,10 +74,13 @@ CREATE TABLE IF NOT EXISTS `komen` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `komen_ibfk_1` FOREIGN KEY (`artikel_id`) REFERENCES `artikel` (`id`) ON DELETE CASCADE,
   CONSTRAINT `komen_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table itedu.komen: ~0 rows (approximately)
+-- Dumping data for table itedu.komen: ~2 rows (approximately)
 DELETE FROM `komen`;
+INSERT INTO `komen` (`id`, `artikel_id`, `user_id`, `parrent_komen_id`, `comment_text`, `created_at`, `updated_at`) VALUES
+	(7, 1, 1, 0, 'baru 1', '2025-07-29 04:11:21', '2025-07-29 04:11:21'),
+	(8, 1, 1, 7, 'baru 1 balas', '2025-07-29 04:11:28', '2025-07-29 04:11:28');
 
 -- Dumping structure for table itedu.role
 CREATE TABLE IF NOT EXISTS `role` (
@@ -85,13 +109,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id_role` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table itedu.users: ~0 rows (approximately)
+-- Dumping data for table itedu.users: ~3 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `email`, `password`, `full_name`, `created_at`, `updated_at`, `id_role`) VALUES
-	(1, '123@gmail.com', '$2y$10$09hldYqc.fWzn2czNKIB4OpFollCNvWcFmNba0T6bYMHBUIiLgqEW', 'dewa', '2025-07-27 18:52:23', '2025-07-27 19:02:55', 1),
-	(2, '456@gmail.com', '$2y$10$J4g3.yNe9rO3JU35KKcV2uwfYmaW8EvmhNHzzL5XGaKwpqvmnznCy', 'Budak', '2025-07-27 19:24:09', '2025-07-27 19:24:09', 2);
+	(1, '123@gmail.com', '$2y$10$09hldYqc.fWzn2czNKIB4OpFollCNvWcFmNba0T6bYMHBUIiLgqEW', 'admin1', '2025-07-27 18:52:23', '2025-07-28 17:45:13', 1),
+	(2, '456@gmail.com', '$2y$10$IaQSysFms6aRD8G2XjQLWO0txcKkGyF0qFR1XTBJF8nDeLLTe6sh6', 'Jonathan', '2025-07-27 19:24:09', '2025-07-29 17:11:32', 2),
+	(3, '234@gmail.com', '$2y$10$J4g3.yNe9rO3JU35KKcV2uwfYmaW8EvmhNHzzL5XGaKwpqvmnznCy', 'Mark', '2025-07-27 19:24:09', '2025-07-28 17:45:30', 2);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
