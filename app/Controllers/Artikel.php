@@ -67,6 +67,7 @@ class Artikel extends Controller
         $article['comments'] = $this->nestComments($article['comments']);
         $data = [
             'page_title' => $article['title'],
+            'jumlah_komen' => $this->komenModel->where('artikel_id', $article['id'])->countAllResults(),
             'article' => $article,
         ];
 

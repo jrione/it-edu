@@ -176,7 +176,7 @@
 
                             <!-- KOMEN -->
                             <div class="comment-section">
-                                <h5>Komentar (<?= count($article['comments']); ?>)</h5>
+                                <h5>Komentar (<?= $jumlah_komen; ?>)</h5>
                                 <?php if (!empty($article['comments'])): ?>
                                     <?php foreach ($article['comments'] as $comment): ?>
                                         <!-- Komentar Utama -->
@@ -237,7 +237,7 @@
                                     <path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
                                 </svg>
                                 <div style="margin-bottom: 2px;">
-                                    <?= esc(count($article['comments'])); ?> Komentar
+                                    <?= esc($jumlah_komen); ?> Komentar
                                 </div>
                             </div>
                         </div>
