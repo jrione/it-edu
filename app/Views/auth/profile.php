@@ -26,7 +26,7 @@
 <div class="page-wrapper mt-5">
     <div class="container-xl">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <?php if (session()->getFlashdata('success')): ?>
                     <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
                 <?php endif; ?>
@@ -65,11 +65,13 @@
                             </div> -->
 
                             <div class="mb-3 text-start">
-                                <label class="form-label">Password Baru (Opsional)</label>
+                                <label class="form-label">Password Baru (Opsionals)</label>
                                 <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ganti">
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Update Profil</button>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Update Profil</button>
+                            </div>
                         </form>
                     </div>
                 </div>
