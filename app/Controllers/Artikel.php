@@ -192,7 +192,7 @@ class Artikel extends Controller
         $rules = [
             'title' => 'required|min_length[5]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,png,jpg,jpeg,mp4,webm,ogg,doc,docx,ppt,pptx,zip,rar]', // Max 2MB, hanya beberapa ekstensi
+            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,png,jpg,jpeg,mp4,mp3,webm,ogg,doc,docx,ppt,pptx,zip,rar]', // Max 2MB, hanya beberapa ekstensi
         ];
 
         if (! $this->validate($rules)) {
@@ -294,7 +294,7 @@ class Artikel extends Controller
         $rules = [
             'title' => 'required|min_length[5]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,png,jpg,jpeg,mp4,webm,ogg,doc,docx,ppt,pptx,zip,rar]',
+            'file_upload' => 'max_size[file_upload,2048]|ext_in[file_upload,pdf,png,jpg,jpeg,mp4,mp3,webm,ogg,doc,docx,ppt,pptx,zip,rar]',
         ];
 
         if (! $this->validate($rules)) {
