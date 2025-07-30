@@ -8,6 +8,35 @@
         /* avoid gap */
     }
 
+    /* Default text colors */
+    .dropdown-item.text-primary {
+        color: blue !important;
+    }
+
+    .dropdown-item.text-success {
+        color: green !important;
+    }
+
+    .dropdown-item.text-danger {
+        color: red !important;
+    }
+
+    /* Hover effects */
+    .dropdown-item.text-primary:hover {
+        background-color: blue !important;
+        color: white !important;
+    }
+
+    .dropdown-item.text-success:hover {
+        background-color: green !important;
+        color: white !important;
+    }
+
+    .dropdown-item.text-danger:hover {
+        background-color: red !important;
+        color: white !important;
+    }
+
     /* Styling for sidebar active link */
     .nav-link.active {
         background-color: #e0e7ff;
