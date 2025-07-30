@@ -94,7 +94,7 @@
                                     <th scope="col" class="text-center fw-bold">Title</th>
                                     <th scope="col" class="text-center fw-bold">Content</th>
                                     <th scope="col" class="text-center fw-bold">Status</th>
-                                    <th scope="col" class="text-center fw-bold"></th>
+                                    <th scope="col" class="text-center fw-bold">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -111,21 +111,12 @@
                                             </span> -->
                                         </td>
                                         <td class="text-center" style="width: 100px;">
-                                            <div class="dropdown">
-                                                <button class="badge bg-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Aksi
+                                            <form style="margin-bottom: 0px;" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="btn btn-sm btn-<?= $value['is_approved'] == 0 ? "success" : "danger" ?>">
+                                                    <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
                                                 </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li>
-                                                        <form style="margin-bottom: 0px;" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
-                                                            <?= csrf_field() ?>
-                                                            <button type="submit" class="dropdown-item" style="border: none; background: none;">
-                                                                <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php } ?>

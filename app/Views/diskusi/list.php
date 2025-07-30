@@ -1,6 +1,13 @@
 <?= $this->extend('\App\Views\template\base') ?>
 <?= $this->section('css'); ?>
 <style>
+    /* Show dropdown on hover */
+    .hover-dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        /* avoid gap */
+    }
+
     /* Styling for sidebar active link */
     .nav-link.active {
         background-color: #e0e7ff;
@@ -113,30 +120,32 @@
                                         </td>
                                         <td class="text-center" style="width: 100px;">
                                             <div class="dropdown">
-                                                <button class="badge bg-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Aksi
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item" href="<?= base_url('artikel/edit/' . $value['id']); ?>">Update</a></li>
-                                                    <?php if (session()->get('user_role') == 'admin') { ?>
+                                                <div class="dropdown hover-dropdown">
+                                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1">
+                                                        Aksi
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                        <li><a class="dropdown-item text-primary" href="<?= base_url('artikel/edit/' . $value['id']); ?>">Update</a></li>
+                                                        <?php if (session()->get('user_role') == 'admin') { ?>
+                                                            <li>
+                                                                <form style="margin-bottom: 0px" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
+                                                                    <?= csrf_field() ?>
+                                                                    <button type="submit" class="dropdown-item text-success" style="border: none; background: none;">
+                                                                        <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        <?php } ?>
                                                         <li>
-                                                            <form style="margin-bottom: 0px;" action="<?= base_url('artikel/approve/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin <?= $value['is_approved'] == 0 ? 'meng-' : 'menolak ' ?>approve artikel?');">
+                                                            <form style="margin-bottom: 0px;" action="<?= base_url('artikel/delete/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus artikel?');">
                                                                 <?= csrf_field() ?>
-                                                                <button type="submit" class="dropdown-item" style="border: none; background: none;">
-                                                                    <?= $value['is_approved'] == 0 ? "Approve" : "Tolak Approve" ?>
+                                                                <button type="submit" class="dropdown-item text-danger" style="border: none; background: none;">
+                                                                    Delete
                                                                 </button>
                                                             </form>
                                                         </li>
-                                                    <?php } ?>
-                                                    <li>
-                                                        <form style="margin-bottom: 0px;" action="<?= base_url('artikel/delete/' . $value['id']); ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus artikel?');">
-                                                            <?= csrf_field() ?>
-                                                            <button type="submit" class="dropdown-item text-danger" style="border: none; background: none;">
-                                                                Delete
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>

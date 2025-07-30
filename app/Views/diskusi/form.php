@@ -100,7 +100,8 @@
                             <div class="mb-3">
                                 <label class="form-label">Tambah / Ganti File</label>
                                 <input type="file" name="file_upload[]" class="form-control" multiple>
-                                <small class="text-muted">Kosongkan jika tidak ingin menambah file.</small>
+                                <small class="text-muted">Kosongkan jika tidak ingin menambah file.</small><br>
+                                <small class="text-danger">* Tipe File yang bisa diupload: .pdf, .png, .jpg, .jpeg, .mp4, .webm, .ogg, .doc, .docx, .ppt, .pptx, .zip, .rar</small>
                             </div>
 
                             <div class="d-flex justify-content-end mt-4">
