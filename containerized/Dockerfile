@@ -37,4 +37,6 @@ RUN sed -i 's/group = nobody/group = nginx/' /etc/php84/php-fpm.d/www.conf
 RUN php84 composer.phar install --no-dev --optimize-autoloader
 RUN chown -R nginx:nginx /var/www/html
 
+CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
+
 EXPOSE 8080

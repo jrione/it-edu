@@ -12,5 +12,9 @@
 3. Run Application
 - With Docker
 ```sh
-    docker run -d -p 8080:8080 --name "it-edu" ghcr.io/jrione/it-edu:latest 
+    docker run -d -p 8080:8080 \
+        --name "it-edu" \
+        -v /mnt/it-edu/writable:/var/www/html/writable \
+        -v /mnt/it-edu/env/.env:/var/www/html/.env:ro \
+        ghcr.io/jrione/it-edu:latest 
 ```

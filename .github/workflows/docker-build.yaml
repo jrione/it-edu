@@ -2,12 +2,11 @@ name: Build and Push CI4 Docker Image
 
 on:
   push:
-    branches: [ main ]
     tags:
       - 'v*.*.*'
 
 env:
-  REGISTRY: cr.jri.one
+  REGISTRY: ghcr.io
   IMAGE_NAME: jrione/it-edu
 
 jobs:
@@ -38,12 +37,12 @@ jobs:
     #   run: |
     #     echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Log in to Registry cr.jri.one
+    - name: Log in to GHCR cr.jri.one
       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
       with:
         registry: ${{ env.REGISTRY }}
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: ${{ secrets.GHCR_USERNAME }}
+        password: ${{ secrets.GHCR_PAT }}
         
     - name: Extract metadata (tags, labels) for Docker
       id: meta
