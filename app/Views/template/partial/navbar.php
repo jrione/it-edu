@@ -7,10 +7,12 @@ $submenu = $uri->getSegment(2);
     <div class="container-xl">
 
         <!-- Hamburger button for mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
-            aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" stroke-width="2"
-                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <button class="navbar-toggler border-0 p-2" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <line x1="4" y1="6" x2="20" y2="6" />
                 <line x1="4" y1="12" x2="20" y2="12" />
