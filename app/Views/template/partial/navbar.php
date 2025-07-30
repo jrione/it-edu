@@ -52,7 +52,7 @@ $submenu = $uri->getSegment(2);
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Artikel Saya
+                                    Approve Artikel
                                 </span>
                             </a>
                         </li>
