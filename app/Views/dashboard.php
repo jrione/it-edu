@@ -153,6 +153,43 @@
                     </div>
                 </div>
             </div>
+
+            <!-- menu di kiri -->
+            <div class="col-md-3">
+                <div class="container">
+                    <div class="text-center mb-3">
+                        <h3 class="for-you-title">Anggota Kelompok</h3>
+                    </div>
+                    <div class="row">
+                        <table border="1" cellpadding="8" cellspacing="0">
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIM</th>
+                            </tr>
+                            <tr>
+                                <td>Ibnu Farhan Ramadhan</td>
+                                <td>230401010323</td>
+                            </tr>
+                            <tr>
+                                <td>Pajri Zahrawaani Ahmad</td>
+                                <td>230401010279</td>
+                            </tr>
+                            <tr>
+                                <td>Ragan Septayuda Lesmana</td>
+                                <td>230401010224</td>
+                            </tr>
+                            <tr>
+                                <td>Yoga Adi Putra</td>
+                                <td>230401020081</td>
+                            </tr>
+                            <tr>
+                                <td>Muhamad Lambda Gibran Ramadhan</td>
+                                <td>230401010320</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
